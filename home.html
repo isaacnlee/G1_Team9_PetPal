@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPal - My Pets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Spicy+Rice&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css_styles/styles.css">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/10.14.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/10.14.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/10.14.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/10.14.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/10.14.0/firebase-storage-compat.js"></script>
+
+
+    <!-- Include Dummy Data -->
+    <!-- <script src="../../../backend/dummyData.js"></script> -->
+    
+    <!-- Include your Firebase config and custom scripts -->
+    <script type = "module" src="firebaseConfig.js"></script>
+
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: white;">
+            <div class="container-fluid">
+                <!-- Logo and brand -->
+                <a class="navbar-brand" href="home.html">
+                    <img src="assets/Logo1.png" alt="Icon1" style="height: 40px; width: auto; margin-right: 1px;">
+                    <span class="logo" style="margin-left: 0px;">PetPal</span>
+                </a>
+                
+                <!-- Toggle button for mobile view -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 14px;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html" id="active-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypets.html">My Pets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="memories.html">Memories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="healthcare.html">Health & Care</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="supplies.html">Food & Supplies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="community.html">Community</a>
+                        </li>
+                    </ul>
+                    <!-- Login/Register Buttons on the right -->
+                    <ul class="navbar-nav ms-auto">
+                        <li><a href="signOut.html" id="signOutButton" class="btn btn-outline-primary btn-sign-out">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Welcome back message -->
+    <div class="padded container-fluid mt-3">
+        <section class="section" style="background-color: #FFF5EB; text-align: left;">
+            <h2 id="welcome-message" style="font-size: 17px;">
+                Welcome back, <span id="user-name"></span>
+            </h2>
+        </section>
+    </div>
+
+   <!-- My Pets Overview-->
+    <div class="padded container-fluid">
+        <section class="section" style="padding-bottom: 10px;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="section-header">
+                    <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> My Pets Overview
+                </h2>
+                <a href="mypets.html" class="btn calendar-view-btn" style="margin-bottom: 10px; font-size: 12px;">
+                    <i class="fas fa-external-link-alt"></i> 'My Pets' Page
+                </a>
+            </div>
+            <hr class="styled-line">
+            <div id="pets-overview" class="row justify-content-center"></div>
+        </section>
+    </div> 
+
+
+
+    <!-- Creating a two-column layout -->
+    <div class="padded container-fluid">
+        <div class="row">
+            <!-- Left Column: Stacking Upcoming Appointments and Upcoming Birthdays -->
+            <div class="col-md-6 col-sm-12">
+                <section class="section">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="section-header">
+                            <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Upcoming Appointments
+                        </h2>
+                        <a href="healthcare.html" class="btn calendar-view-btn" style="margin-bottom: 10px; font-size: 12px;">
+                            <i class="fas fa-external-link-alt"></i> 'Health & Care' Page
+                        </a>
+                    </div>
+                    <hr class="styled-line">
+                    <div style="width:100%;">
+                        <div id="upcoming-appts" class="table-container">
+                            <!-- Table will be inserted here -->
+                        </div>
+                        <div id="24hours-appt-box">
+                            <!-- Message explaining 24 hours highlight will be here -->
+                        </div>
+                        <div id="reminder-box">
+                            <!-- Reminder message will be inserted here -->
+                        </div>
+                    </div>
+                    
+                </section>
+            </div>
+            
+
+            <!-- Right Column: Pet Supplies Running Low section -->
+            <div class="col-md-6 col-sm-12">
+                <section class="section">
+                    <div>
+                        <h2 class="section-header" style="margin-bottom: 18px;">
+                            <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Upcoming Birthdays
+                        </h2>
+                        <hr class="styled-line">
+                        <div id="upcoming-birthdays" class="table-container"></div>
+                    </div>
+                </section>
+                
+                <section class="section">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="section-header">
+                            <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Pet Supplies Running Low
+                        </h2>
+                        <a href="supplies.html" class="btn calendar-view-btn" style="margin-bottom: 10px; font-size: 12px;">
+                            <i class="fas fa-external-link-alt"></i> 'Food & Supplies' Page
+                        </a>
+                    </div>
+                    <hr class="styled-line">
+                    <div id="low-supplies" class="table-container"></div>                
+                </section>
+
+            </div>
+        </div>
+    </div>
+    
+<!-- Appointment Details Modal Structure -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"> <!-- Already centered vertically -->
+        <div class="modal-content">
+            <div>
+                <p class="modal-title" id="appointmentModalLabel">Appointment Information</p>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- Modal content will be dynamically inserted here -->
+            </div>
+            <div>
+                <button type="button" class="cancel-button" onclick="closeModal('appointmentModal')" style="padding-top:0px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    
+
+    <footer>
+        <p>&copy; 2024 PetPal. All rights reserved.</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script type="module" src="home.js"></script>
+    <!-- <script src="../SignOut/signOut.js"></script> -->
+</body>
+</html>

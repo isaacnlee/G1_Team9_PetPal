@@ -1,0 +1,99 @@
+<style>
+    /* Navbar styles */
+    .navbar {
+    
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    }
+    .navbar img {
+    height: 40px;
+    margin-right: 20px;
+    }
+    .navbar a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    }
+
+    /* Navbar custom breakpoints */
+    @media (max-width: 1200px) {
+    .navbar-nav {
+        justify-content: center;
+    }
+    }
+    @media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .navbar-nav .nav-item {
+        margin-bottom: 10px;
+    }
+    }
+    @media (max-width: 480px) {
+    .navbar-brand img {
+        height: 30px;
+        margin-bottom: 10px;
+    }
+    }
+    .navbar-nav .nav-item {
+    border-right: 1px solid #ccc;
+    }
+    .navbar-nav .nav-item:last-child {
+    border-right: none;
+    }
+    @media (max-width: 992px) {
+    .navbar-nav .nav-item {
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+    }
+    .navbar-nav .nav-item:last-child {
+        border-bottom: none;
+    }
+    }
+
+</style>
+
+<!-- Nav Bar-->
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: white;">
+    <a class="navbar-brand" href="newHome.html"><img src="frontend/assets/Logo.png" alt="PetPal Logo" height="40"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="newHome.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pet.html">My Pets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="task.html">Health & Care</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="milestone.html">Milestones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="supply.html">Food & Supplies</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Profile
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+</nav>
+
+<!-- Footer -->
+<footer class="text-center mt-5">
+    <p>&copy; 2024 PetPal. All rights reserved.</p>
+</footer>

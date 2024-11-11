@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPal - Food & Supplies</title>
+    <!-- Add Bootstrap for Navbar Responsiveness -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Spicy+Rice&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Add chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script> <!-- Plugin for zooming -->
+    
+    
+    <link rel="stylesheet" href="css_styles/styles.css">
+
+     <!-- Include Firebase SDKs -->
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-functions-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
+
+    
+    <!-- Include your Firebase config and custom scripts -->
+    <script type = "module" src="firebaseConfig.js"></script>
+
+    <!-- Include Dummy Data -->
+    <!-- <script src="../../../backend/dummyData.js"></script> -->
+
+</head>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: white;">
+        <div class="container-fluid">
+            <!-- Logo and brand -->
+            <a class="navbar-brand" href="home.html">
+                <img src="assets/Logo1.png" alt="Icon1" style="height: 40px; width: auto; margin-right: 1px;">
+                <span class="logo" style="margin-left: 0px;">PetPal</span>
+            </a>
+            
+            <!-- Toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 14px;">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mypets.html">My Pets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="memories.html">Memories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="healthcare.html" id="active-link">Health & Care</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="supplies.html">Food & Supplies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">Community</a>
+                    </li>
+                </ul>
+                <!-- Login/Register Buttons on the right -->
+                <ul class="navbar-nav ms-auto">
+                    <li><a href="signOut.html" id="signOutButton" class="btn btn-outline-primary btn-sign-out">Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body>
+    <!-- Main content in a container div -->
+    <div class="padded container-fluid"> 
+        <section class="section container-fluid">
+            <div>
+                <h2 class="section-header">
+                    <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Appointments
+                </h2>
+                <hr class="styled-line">
+
+                <!-- Table for pet supplies -->
+                <div class="appointment-section">
+                    <div class="d-flex justify-content-end" style="padding-right:25px;">
+                        <button id="calendar-view-btn" class="calendar-view-btn"><i class="fa-solid fa-calendar-days"></i> Calendar View</button>
+                    </div>
+                    <div id="message-container" style="display: none; text-align: center; margin-top: 20px; font-size: 15px; color: #555; display: flex; padding:10px;" ></div>
+                    <!-- Calendar View -->
+                    <div class="calendar-container" style="display: none; margin-top: 30px; padding: 10px; margin-bottom: 50px;">
+                        <div id="calendar-header">
+                            <button id="prev-month">Prev</button>
+                            <div id="month-year"></div>
+                            <button id="next-month">Next</button>
+                        </div>
+                        <div id="calendar-days">
+                            <!-- Days of the week will be added here -->
+                        </div>
+                        <div id="calendar-dates">
+                            <!-- Dates will be dynamically generated here -->
+                        </div>
+                    </div>
+                    <!-- List View -->
+                    <div class="table-container" style="padding: 10px; margin-bottom: 0px;">
+                        <div class="reminder-message-box" style="padding: 20px; padding-bottom: 0px; margin-bottom: 30px;">
+                            <p class="reminder-header">
+                                <i class="fa-solid fa-circle-info"></i> Incomplete appointments (if any) are highlighted in yellow for your attention.
+                            </p>
+                            <p style="font-style: italic;">
+                                Click the 'Reschedule' button to review and reschedule them!
+                            </p>
+                        </div>
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Appointment Type</th>
+                                    <th>Pet</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Address</th>
+                                    <th>Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Appointment rows will go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <button class="add-button" id="add-appt-btn" style="margin-top:0px;">+ Add New Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weight section with wrapping container -->
+        <section class="section container-fluid">
+            <h2 class="section-header">
+                <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Weight Tracker
+            </h2>
+            <hr class="styled-line">
+            <!-- Wrap Filter and Chart inside a wrapper -->
+            <div class="filter-chart-wrapper" style="margin-bottom: 30px;">
+                <!-- Filter chart -->
+                <!-- Filter chart -->
+                <div class="filter-container">
+                    <div class="date-filter-inputs filter-instructions">
+                        <label for="start-date">Select Start Date</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="date-filter-inputs filter-instructions">
+                        <label for="end-date">Select End Date</label>
+                        <input type="date" id="end-date">
+                    </div>
+                    <div class="button-container">
+                        <button id="apply-date-filter" class="apply-button">Apply Date Filter</button>
+                        <button id="reset-date-filter" class="reset-button">Reset</button>
+                    </div>
+                    <div style="font-weight: lighter; font-style: italic; margin-top: 10px; color: white;">
+                        <i class="fa-solid fa-circle-info"></i> By default, 3 months of weight data is shown!
+                    </div>
+                </div>
+            
+                <!-- Chart section -->
+                <div class="supply-analytics-section">
+                    <div id="weight-message-container" style="display: none; text-align: center; margin-top: 20px; font-size: 15px; color: #555;">
+                        No pet weight has been recorded! <br> Click the button below to add a new pet weight!
+                    </div>
+                    <div id="weight-filter-message-container" style="display: none; text-align: center; margin-top: 20px; font-size: 15px; color: #555;">
+                        No weight data found! <br> Please select another date range.
+                    </div>
+                    <canvas id="weight-chart"></canvas>
+                </div>
+                
+            </div>
+            
+
+            
+        
+            <div class="button-container text-center">
+                <button class="add-button" id="add-weight-btn">+ Add New Pet Weight</button>
+            </div>
+        </section>
+        
+    </div>
+
+    
+    <!-- Add New Appointment Form -->
+    <!-- Add New Item Form -->
+    <!-- Add New Appointment Form -->
+<div class="modal" id="add-appt-modal" style="display: none;">
+    <div class="modal-content horizonal-scroll">
+        <h2 class="modal-title" >Add New Pet Appointment</h2>
+        <form id="add-item-form" style="text-align: left;">
+            <label for="appointmentType">Appointment Type</label>
+            <select id="appointmentType" name="appointmentType" required>
+                <option value="" disabled selected hidden>Select a type</option>
+                <option value="Vet">Vet</option>
+                <option value="Grooming">Grooming</option>
+                <option value="Outing">Outing</option>
+                <option value="Others">Others</option>
+            </select>
+            <label for="pet">Pet</label>
+            <select id="pet" name="pet" required>
+                <!-- Options will be dynamically populated here -->
+            </select>
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+            <label for="time">Time</label>
+            <input type="time" id="time" name="time" required>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" required>
+            <label for="details">Details</label>
+            <textarea id="details" name="details" style="width:100%;" required></textarea>
+            <button type="submit" class="add-button" style="margin-top: 15px;">Add Appointment</button>
+            <button type="button" class="cancel-button" id="cancel-modal">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Appointment Modal -->
+<div class="modal" id="edit-appt-modal" style="display: none;">
+    <div class="modal-content horizonal-scroll">
+        <h2 class="modal-title">Edit Pet Appointment</h2>
+        <form id="edit-item-form" style="text-align: left;">
+            <label for="edit-appointmentType">Appointment Type</label>
+            <select id="edit-appointmentType" name="edit-appointmentType" required>
+                <option value="" disabled selected hidden>Select a type</option>
+                <option value="Vet">Vet</option>
+                <option value="Grooming">Grooming</option>
+                <option value="Outing">Outing</option>
+                <option value="Others">Others</option>
+            </select>
+            <label for="edit-pet">Pet</label>
+            <select id="edit-pet" name="edit-pet" required>
+                <!-- Options will be dynamically populated here -->
+            </select>
+            <label for="edit-date">Date</label>
+            <input type="date" id="edit-date" name="edit-date" required>
+            <label for="edit-time">Time</label>
+            <input type="time" id="edit-time" name="edit-time" required>
+            <label for="edit-address">Address</label>
+            <input type="text" id="edit-address" name="edit-address" required>
+            <label for="edit-details">Details</label>
+            <textarea id="edit-details" name="edit-details" style="width:100%;" required></textarea>
+            <button type="submit" class="add-button" id="save-edit" style="margin-top: 15px;">Save Changes</button>
+            <button type="button" class="cancel-button" id="cancel-edit">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Appointment Modal -->
+<div class="modal" id="appointment-modal" style="display: none;">
+    <div class="modal-content horizonal-scroll">
+        <h2 class="modal-title" id="appointment-modal-header" style="font-size: 20px;"></h2>
+        <div id="appointment-modal-content">
+
+        </div>
+        <button type="button" class="cancel-button" id="close-modal" style="margin-top: 15px">Cancel</button>
+    </div>
+</div>
+
+<!-- Add Weight Modal -->
+<div class="modal" id="add-weight-modal" style="display: none;">
+    <div class="modal-content horizonal-scroll">
+        <h2 class="modal-title">Add New Pet Weight</h2>
+        <form id="add-weight-form" style="text-align: left;">
+            <label for="weight_pet">Pet</label>
+            <select id="weight_pet" name="weight_pet" required>
+                <!-- Options will be dynamically populated here -->
+            </select>
+            <label for="weight_date">Date</label>
+            <input type="date" id="weight_date" name="weight_date" required>
+            <label for="new_weight">Weight (in kg)</label>
+            <input type="number" id="new_weight" name="new_weight" step="0.01" required>
+            <button type="submit" class="add-button" style="margin-top: 15px;">Add Weight</button>
+            <button type="button" class="cancel-button" id="cancel-weight-modal">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-confirmation-modal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Delete Appointment?</h2>
+        <p>This will permanently delete the selected appointment.</p>
+        <div class="d-flex justify-content-center" style="gap: 10px; padding-top: 10px;">
+            <button class="cancel-button" onclick="closeModal('delete-confirmation-modal')">Cancel</button>
+            <button class="add-button" id="confirm-delete-btn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmation-modal" style="display: none;">
+    <div class="modal-content">
+        <h2 class="modal-title">Confirm Override</h2>
+        <p id="confirmation-message"></p>
+        <button id="proceed-btn" class="add-button" style="margin-top: 15px;">Confirm</button>
+        <button id="cancel-confirmation-btn" class="cancel-button" style="margin-top: 0px;">Cancel</button>
+    </div>
+</div>
+
+
+
+
+
+
+    <footer>
+        <p>&copy; 2024 PetPal. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="healthcare.js" defer></script>
+</body>
+</html>

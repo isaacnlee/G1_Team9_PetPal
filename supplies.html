@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPal - Food & Supplies</title>
+    <!-- Add Bootstrap for Navbar Responsiveness -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Spicy+Rice&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Add chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script> <!-- Plugin for annotation -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script> <!-- Include the date adapter for date-fns -->
+    <!-- Add d3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <link rel="stylesheet" href="css_styles/styles.css">
+
+     <!-- Include Firebase SDKs -->
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-functions-compat.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
+    
+    <!-- Include your Firebase config and custom scripts -->
+    <script type="module" src="firebaseConfig.js"></script>
+    
+    <!-- Include Dummy Data
+    <script src="../../../backend/dummyData.js"></script> -->
+
+</head>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: white;">
+        <div class="container-fluid">
+            <!-- Logo and brand -->
+            <a class="navbar-brand" href="home.html">
+                <img src="assets/Logo1.png" alt="Icon1" style="height: 40px; width: auto; margin-right: 1px;">
+                <span class="logo" style="margin-left: 0px;">PetPal</span>
+            </a>
+            
+            <!-- Toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 14px;">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mypets.html">My Pets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="memories.html">Memories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="healthcare.html">Health & Care</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="supplies.html" id="active-link">Food & Supplies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">Community</a>
+                    </li>
+                </ul>
+                <!-- Login/Register Buttons on the right -->
+                <ul class="navbar-nav ms-auto">
+                    <li><a href="signOut.html" id="signOutButton" class="btn btn-outline-primary btn-sign-out">Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body>
+    <!-- Main content in a container div -->
+
+    <div class="padded container-fluid"> 
+
+        <!-- SECTION 1 -->
+        <section class="section">
+            <div class="my-pets-section">
+                <h2 class="section-header">
+                    <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Food & Supplies Available
+                </h2>
+                <hr class="styled-line" style="margin-bottom: 30px;">
+
+                <!-- Table for pet supplies -->
+                <div class="supplies-section" style="padding:10px;">
+                    <div id="message-container" style="display: none; text-align: center; margin-top: 20px; font-size: 15px; color: #555;"></div>
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Category</th>
+                                    <th>Item</th>
+                                    <th>Quantity Available</th>
+                                    <th>Quantity Required</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="button-container text-center">
+                        <button class="add-button" id="add-item-btn">+ Add New Item</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       
+
+
+
+
+        <!-- SECTION 3 -->
+        <!-- Chart section with wrapping container -->
+        <section class="section chart-section">
+            <h2 class="section-header">
+                <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Supplies Analytics
+            </h2>
+            <hr class="styled-line" style="margin-bottom: 30px;">
+    
+            <!-- New container to wrap filter and chart together -->
+            <div class="filter-chart-wrapper" style="margin-bottom: 30px;">
+                <!-- Filter by Category Section -->
+                <div id="category-filters" class="filter-container">
+                    <p class="filter-instructions">Filter by Category</p>
+                    <div class="filter-options">
+                        <button class="btn-filter" data-category="Food">Food</button>
+                        <button class="btn-filter" data-category="Treats">Treats</button>
+                        <button class="btn-filter" data-category="Bath Items">Bath Items</button>
+                        <button class="btn-filter" data-category="Toys">Toys</button>
+                        <button class="btn-filter" data-category="Wellness">Wellness</button>
+                        <button class="btn-filter" data-category="Others">Others</button>
+                    </div>
+                    <div class="button-container text-center">
+                        <button class="add-button" id="reset-chart">Reset Chart</button>
+                    </div>
+                </div>
+        
+                <!-- Chart section -->
+                <div class="supply-analytics-section">
+                    <div id='chart-message-container'></div>
+                    <canvas id="supplyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+
+         <!-- SECTION 2 -->
+         <section class="section">
+            <div class="my-pets-section">
+                <h2 class="section-header">
+                    <img src="assets/Paws.png" alt="Paws Icon" class="header-icon"> Food & Supplies Consumed
+                </h2>
+                <hr class="styled-line" style="margin-bottom: 30px;">
+               <!-- Consumption section -->
+                <div class="consumption-section" id="consumption-section" style="margin-right:20px; margin-left:20px; align-items: center;"></div>
+
+                <div class="button-container text-center">
+                    <button class="add-button" id="add-consumption-btn">+ Add Supply Consumption</button>
+                </div>
+            </div>
+        </section>
+
+        
+    </div>
+
+
+    
+
+    <!-- Add New Item Form -->
+    <div class="modal" id="add-item-modal" style="display: none;">
+        <div class="modal-content horizonal-scroll">
+            <h2 class="modal-title">Add New Pet Supply Item</h2>
+            <form id="add-item-form" style="text-align: left;">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected hidden>Select a category</option>
+                    <option value="Food">Food</option>
+                    <option value="Treats">Treats</option>
+                    <option value="Bath Items">Bath Items</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Others">Others</option>
+                </select>
+                <label for="item">Item</label>
+                <input type="text" id="item" name="item" required>
+                <label for="quantity">Quantity Available</label>
+                <input type="number" id="quantity" name="quantity" required step="0.1">
+                <label for="units">Units</label>
+                <input type="text" id="units" name="units" required>
+                <label for="minQty">Minimum Quantity Required</label>
+                <input type="number" id="minQty" name="minQty" required step="0.1">
+                <button type="submit" class="add-button">Add Item</button>
+                <button type="button" class="cancel-button" id="cancel-modal">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Supply Item Modal -->
+    <div class="modal" id="edit-supplyItems-modal" style="display: none;">
+        <div class="modal-content horizonal-scroll">
+            <h2 class="modal-title">Edit Pet Supply Item</h2>
+            <form id="edit-item-modal-form" style="text-align: left;">
+                <label for="category">Category</label>
+                <select id="edit-category" name="edit-category" disabled required>
+                    <option value="Food">Food</option>
+                    <option value="Treats">Treats</option>
+                    <option value="Bath Items">Bath Items</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Others">Others</option>
+                </select>
+                <label for="item">Item</label>
+                <input type="text" id="edit-item" name="edit-item" disabled required>
+                <label for="units">Units</label>
+                <input type="text" id="edit-units" name="edit-units" disabled required>
+                <label for="quantity">Edit Quantity Available</label>
+                <input type="number" id="edit-quantity" name="edit-quantity" required step="0.1">
+                <label for="minQty">Edit Minimum Quantity Required</label>
+                <input type="number" id="edit-minQty" name="edit-minQty" required step="0.1">
+                <!-- Hidden Field for FIRESTORE-->
+                <input type="hidden" id="supply-document-id">
+
+                <button type="submit" class="add-button">Save Changes</button>
+                <button type="button" class="cancel-button" id="cancel-edit-supply">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Add Supply Consumption Modal -->
+    <div class="modal" id="edit-consumption-modal" style="display: none;">
+        <div class="modal-content horizonal-scroll" style="text-align: left;">
+        <h2 class="modal-title">Add Pet's Supply Consumption</h2>
+        <form id="consumptionForm">
+            <label for="consumption-date">Date</label>
+            <input type="date" id="consumption-date" required>
+            
+            <label for="pet-select">Pet</label>
+            <select id="pet-select" required>
+            </select>
+
+            <label for="category-select">Supply Category</label>
+            <select id="category-select" required>
+            </select>
+
+            <label for="item-select">Supply Item</label>
+            <select id="item-select" required>
+            </select>
+                        
+            <label for="unit-label">Units</label>
+            <input type="text" id="unit-label" disabled >
+
+            <label for="quantity-consumed">Quantity Consumed</label>
+            <input type="number" id="quantity-consumed" step="0.1" min="0" required>
+
+
+            <button type="submit" id="add-consumption-btn" class="add-button">Submit</button>
+            <button type="button" id="cancel-consumption-btn" class="cancel-button">Cancel</button>
+        </form>
+        </div>
+    </div>
+  
+     <!-- Delete Confirmation Modal -->
+     <div id="delete-confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Delete Supply Item?</h2>
+            <p>This will permanently delete the selected supply item and associated data.</p>
+            <div class="d-flex justify-content-center" style="gap: 10px; padding-top: 10px;">
+                <button class="cancel-button" onclick="closeModal('delete-confirmation-modal')">Cancel</button>
+                <button class="add-button" id="confirm-delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 PetPal. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="supplies.js"></script>
+</body>
+</html>
