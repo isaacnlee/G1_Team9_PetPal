@@ -4,15 +4,9 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 
-// Fill in with your own web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCNhykel9ZESR6bwbWfom01Ku8JKw1O_F4",
-    authDomain: "petpal-10563.firebaseapp.com",
-    projectId: "petpal-10563",
-    storageBucket: "petpal-10563.appspot.com",
-    messagingSenderId: "471578757310",
-    appId: "1:471578757310:web:631572ad445ff2268c76ef"
-};
+// Fill in const firebaseConfig with your own web app's Firebase configuration
+// const firebaseConfig = {
+// };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
